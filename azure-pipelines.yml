@@ -7,8 +7,23 @@ trigger:
 - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'Ubuntu 16.04'
 
-steps:
+steps
+- task: UseDotNet@2
+  displayName: 'Use .NET Core sdk'
+  inputs:
+    packageType: sdk
+    version: 2.1.x
+- task: UseDotNet@2
+  displayName: 'Use .NET Core sdk'
+  inputs:
+    packageType: sdk
+    version: 3.1.x
+- script: dotnet tool install Nuke.GlobalTool --global
+  displayName: Nuke install
 - script: dotnet test XUnitTestProject
   displayName: 'Run a one-line script'
+
+
+  
