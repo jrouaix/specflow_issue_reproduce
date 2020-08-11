@@ -9,7 +9,7 @@ trigger:
 pool:
   vmImage: 'Ubuntu 16.04'
 
-steps
+steps:
 - task: UseDotNet@2
   displayName: 'Use .NET Core sdk'
   inputs:
@@ -20,10 +20,16 @@ steps
   inputs:
     packageType: sdk
     version: 3.1.x
+
+
+- script: dotnet test XUnitTestProject --configuration Release --logger "trx;LogFileName=XUnitTestProject.trx" --results-directory _.testsOutput /property:CollectCoverage=True /property:CoverletOutputFormat=opencover
+  displayName: 'dotnet test'
+
+
 - script: dotnet tool install Nuke.GlobalTool --global
   displayName: Nuke install
-- script: dotnet test XUnitTestProject
-  displayName: 'Run a one-line script'
+- script: nuke
+  displayName: 'nuke test'
 
 
   
