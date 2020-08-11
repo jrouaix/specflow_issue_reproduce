@@ -31,13 +31,18 @@ class Build : NukeBuild
     [Solution] readonly Solution Solution;
     [GitRepository] readonly GitRepository GitRepository;
 
+    virtual protected AbsolutePath TestsOuputDirectory => RootDirectory / "_.testsOutput";
+
     Target Tests => _ => _
         .Executes(() =>
         {
             DotNetTest(s => s
-                .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
-                //.EnableNoRestore()
+                .SetResultsDirectory(TestsOuputDirectory)
+                .SetLogger($"trx;LogFileName=mytests.trx   ")
+                .SetProperty("CollectCoverage", true)
+                .SetProperty("CoverletOutputFormat", "opencover")
+                .SetProjectFile(Solution)
                 );
         });
 
